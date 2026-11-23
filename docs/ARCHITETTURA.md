@@ -25,3 +25,12 @@ PWA leggera e offline-first, isolata dalle altre app DISMAT, sviluppata con codi
 - MVP manuale: foto, marcatori, CRUD, backup JSON, stampa PDF.
 - Catalogo STC: fonti, provenienza e data aggiornamento, verifica documentale.
 - Scanner assistito: prove su fotografie reali, misure di errore, controllo operatore prima di applicare la rilevazione automatica.
+
+## Catalogo STC v0.3
+- `src/catalog/catalog-data.mjs`: soli documenti pubblici di produttori verificati, versionati con il codice.
+- `src/catalog/catalog-model.mjs`: normalizzazione delle sequenze, ricerca e validazione dei dati senza DOM.
+- `src/catalog/catalog-store.mjs`: CRUD delle voci manuali in `localStorage` separato da IndexedDB scansioni; backup JSON indipendente.
+- `src/catalog/catalog-view.mjs`: escape HTML, schede e stato della data del documento.
+- `src/catalog/catalog-controller.mjs`: ricerca e gestione interfaccia senza intaccare i controller delle scansioni.
+- Una corrispondenza del marchio indica solo un possibile documento da esaminare. Nessuna compilazione automatica di produttore o esito.
+- L’aggiornamento dei documenti integrati richiede una modifica versionata del catalogo e una nuova pubblicazione, senza cancellare le schede locali.

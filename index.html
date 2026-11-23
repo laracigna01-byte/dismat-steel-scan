@@ -20,12 +20,13 @@
       <div class="sidebar-kicker">STRUMENTI</div>
       <nav class="nav" aria-label="Navigazione">
         <button class="nav-link is-active" data-panel="scanner"><span class="nav-ico">⌗</span> Scanner <span class="nav-arrow">↗</span></button>
+        <button class="nav-link" data-panel="catalog"><span class="nav-ico">▦</span> Acciaierie <span class="nav-count" id="catalogCount">2</span></button>
         <button class="nav-link" data-panel="archive"><span class="nav-ico">▤</span> Archivio <span class="nav-count" id="sideCount">0</span></button>
         <button class="nav-link" data-panel="guide"><span class="nav-ico">ⓘ</span> Guida</button>
       </nav>
       <div class="sidebar-spacer"></div>
       <div class="local-card"><span class="local-dot"></span><div><strong>Archivio locale</strong><small>Le foto restano sul dispositivo</small></div></div>
-      <div class="sidebar-footer">DISMAT · VERSIONE STUDIO 0.2<br>PROTOTIPO AD USO INTERNO</div>
+      <div class="sidebar-footer">DISMAT · VERSIONE STUDIO 0.3<br>PROTOTIPO AD USO INTERNO</div>
     </aside>
 
     <div class="main-column">
@@ -66,6 +67,7 @@
             <section class="surface data-surface" aria-label="Dati della rilevazione">
               <div class="surface-heading"><div><span class="section-index">02</span><h2>Dati e lettura</h2></div><button class="link-button" id="newButton">+ Nuova scheda</button></div>
               <div class="result-box"><span class="result-label">CODICE RICOSTRUITO · DA CONFERMARE</span><div class="result-main" id="codeResult">—</div><p id="codeHelp">Marca almeno due nervature ingrossate e le nervature normali intermedie.</p><div class="result-footer"><span id="largeCounter">0 ingrossate</span><span class="result-separator">·</span><span id="normalCounter">0 normali</span><button id="reverseButton" title="Inverti la direzione di lettura">⇄ Inverti lettura</button></div></div>
+              <div class="catalog-lookup"><button class="button button-outline" id="lookupCodeButton" disabled>⌕ Cerca nel catalogo STC</button><span>Solo confronto esatto con documenti pubblicati, non identificazione automatica.</span></div>
               <div class="form-grid">
                 <label class="field full">Cantiere / commessa <input id="site" placeholder="Es. Cantiere Roma - Lotto A" autocomplete="off"></label>
                 <label class="field">Data rilievo <input type="date" id="date"></label>
@@ -84,6 +86,33 @@
           </div>
         </section>
 
+        <section id="catalogPanel" class="panel" hidden>
+          <div class="page-intro short"><div><div class="eyebrow"><span class="eyebrow-line"></span> FONTI DOCUMENTALI / STC</div><h1>Catalogo <em>acciaierie.</em></h1><p>Consulta codici di laminazione e attestati delle barre B450C. I dati sono una selezione verificata sui documenti pubblicati dai produttori: non una banca dati STC ufficiale aggiornata in tempo reale.</p></div></div>
+          <section class="surface catalog-surface">
+            <div class="catalog-toolbar"><label class="search-wrap"><span>⌕</span><input id="catalogSearch" type="search" placeholder="Marchio 0-4-2-6, acciaieria o attestato..." autocomplete="off"></label><button id="catalogAddButton" class="button button-primary">+ Aggiungi voce</button></div>
+            <div class="catalog-meta"><span id="catalogRevision">Fonti: in caricamento...</span><span>Fonti originali consultabili online</span></div>
+            <div class="catalog-list" id="catalogList"></div>
+          </section>
+          <div class="catalog-tools-row"><button id="catalogExportButton" class="button button-outline">↓ Backup catalogo manuale</button><label class="button button-outline upload-button">↑ Importa catalogo JSON<input type="file" id="catalogImportInput" accept=".json,application/json" hidden></label></div>
+          <section id="catalogFormWrap" class="surface catalog-editor" hidden>
+            <div class="surface-heading"><div><span class="section-index">＋</span><h2 id="catalogEditTitle">Nuova scheda manuale</h2></div></div>
+            <form id="catalogEntryForm"><div class="form-grid">
+              <label class="field full">Produttore *<input id="catalog_producer" maxlength="300" required></label>
+              <label class="field full">Stabilimento<input id="catalog_plant" maxlength="300"></label>
+              <label class="field">Codice di laminazione<input id="catalog_markCode" placeholder="0-4-2-6"></label>
+              <label class="field">Classe acciaio<input id="catalog_steel" placeholder="B450C"></label>
+              <label class="field">Prodotto<input id="catalog_product" placeholder="Barre laminate a caldo"></label>
+              <label class="field">Diametri<input id="catalog_diameters" placeholder="8-32 mm"></label>
+              <label class="field full">Numero attestato<input id="catalog_certificate" placeholder="000/00-CA"></label>
+              <label class="field">Dal<input type="date" id="catalog_validFrom"></label>
+              <label class="field">Al<input type="date" id="catalog_validUntil"></label>
+              <label class="field full">URL fonte HTTPS<input type="url" id="catalog_sourceUrl" placeholder="https://..."></label>
+              <label class="field full">Note<input id="catalog_notes" maxlength="1000"></label>
+            </div><div class="action-row"><button class="button button-primary wide" type="submit">Salva scheda manuale</button><button class="button button-outline" type="button" id="catalogCancelButton">Annulla</button></div><p class="form-disclaimer">Le schede manuali sono sempre contrassegnate come NON VERIFICATE. Le fonti documentate integrate nell'app non sono modificabili da qui. Il loro aggiornamento avviene nel codice versionato.</p></form>
+          </section>
+          <p class="catalog-warning">⚠ La corrispondenza di una sequenza non dimostra da sola l'identita del produttore. Controllare marchio completo, verso, stabilimento, lotto e attestato originale; la data indicata nel PDF non garantisce l'assenza di revoche o sostituzioni.</p>
+        </section>
+
         <section id="archivePanel" class="panel" hidden>
           <div class="page-intro short"><div><div class="eyebrow"><span class="eyebrow-line"></span> DATI DEL DISPOSITIVO</div><h1>Archivio <em>rilievi.</em></h1><p>Le schede e le fotografie sono conservate localmente in questo browser. Esporta un backup per trasferirle o proteggerle.</p></div></div>
           <section class="surface archive-surface">
@@ -94,11 +123,11 @@
 
         <section id="guidePanel" class="panel" hidden>
           <div class="page-intro short"><div><div class="eyebrow"><span class="eyebrow-line"></span> UTILIZZO E LIMITI</div><h1>Come <em>funziona.</em></h1><p>Una prima versione operativa, senza automatismi che possano produrre risultati tecnici non verificati.</p></div></div>
-          <div class="guide-grid"><article class="surface guide-card"><span class="guide-number">01</span><h2>Acquisisci</h2><p>Carica una fotografia nitida del marchio, possibilmente con tutta la sequenza delle nervature. Puoi ruotarla e aumentare zoom e contrasto.</p></article><article class="surface guide-card"><span class="guide-number">02</span><h2>Marca</h2><p>Seleziona <b>Nervatura ingrossata</b> e tocca le nervature di riferimento. Passa a <b>Nervatura normale</b> e tocca quelle intermedie. Per correggere, tocca nuovamente un punto.</p></article><article class="surface guide-card"><span class="guide-number">03</span><h2>Leggi</h2><p>L'app ordina le marcature lungo la barra e conta le nervature normali comprese tra due ingrossate consecutive. Controlla sempre il verso e la sequenza risultante.</p></article><article class="surface guide-card"><span class="guide-number">04</span><h2>Documenta</h2><p>Compila il riferimento del cantiere e, se disponibili, DDT e attestato. Salva la scheda o stampa in PDF. Il confronto con gli attestati è ancora manuale.</p></article></div>
-          <div class="guide-note"><strong>Importante</strong><p>La versione 0.1 non identifica automaticamente il produttore, non verifica online gli attestati STC, non effettua riconoscimento fotografico tramite IA e non certifica la conformità del materiale. Il backup JSON comprende le fotografie: conservalo in una posizione aziendale adeguata.</p></div>
+          <div class="guide-grid"><article class="surface guide-card"><span class="guide-number">01</span><h2>Acquisisci</h2><p>Carica una fotografia nitida del marchio, possibilmente con tutta la sequenza delle nervature. Puoi ruotarla e aumentare zoom e contrasto.</p></article><article class="surface guide-card"><span class="guide-number">02</span><h2>Marca</h2><p>Seleziona <b>Nervatura ingrossata</b> e tocca le nervature di riferimento. Passa a <b>Nervatura normale</b> e tocca quelle intermedie. Per correggere, tocca nuovamente un punto.</p></article><article class="surface guide-card"><span class="guide-number">03</span><h2>Leggi</h2><p>L'app ordina le marcature lungo la barra e conta le nervature normali comprese tra due ingrossate consecutive. Controlla sempre il verso e la sequenza risultante.</p></article><article class="surface guide-card"><span class="guide-number">04</span><h2>Documenta</h2><p>Compila il riferimento del cantiere e, se disponibili, DDT e attestato. Salva la scheda o stampa in PDF. Il confronto con gli attestati resta responsabilita dell’operatore.</p></article></div>
+          <div class="guide-note"><strong>Importante</strong><p>La versione 0.3 confronta la sequenza letta con un catalogo documentale parziale, ma non identifica automaticamente il produttore ne verifica online gli attestati STC, non effettua riconoscimento fotografico tramite IA e non certifica la conformità del materiale. Il backup JSON comprende le fotografie: conservalo in una posizione aziendale adeguata.</p></div>
         </section>
       </main>
-      <footer class="main-footer">© DISMAT · STRUMENTO INTERNO DI SUPPORTO <span>VERSIONE STUDIO 0.2</span></footer>
+      <footer class="main-footer">© DISMAT · STRUMENTO INTERNO DI SUPPORTO <span>VERSIONE STUDIO 0.3</span></footer>
     </div>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>

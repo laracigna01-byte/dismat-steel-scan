@@ -5,10 +5,12 @@ import { makeBackup, parseBackup } from '../services/backup-service.mjs';
 import { drawAnnotatedPhoto } from '../views/photo-canvas.mjs';
 import { archiveMarkup } from '../views/archive-view.mjs';
 import { makePrintHtml } from '../views/pdf-view.mjs';
+import { initCatalogController } from '../catalog/catalog-controller.mjs';
 
 const $ = id => document.getElementById(id);
 const repository=createScanRepository();
 let databaseReady=false;
+let catalogController=null;
 let photo = null;
 let toastHandle;
 let editingId = null;
@@ -77,13 +79,14 @@ function updateReading(){
   $('codeResult').textContent=result.code||'—';$('largeCounter').textContent=`${result.largeCount} ingrossate`;$('normalCounter').textContent=`${result.normalCount} normali`;
   $('codeHelp').textContent=!result.code?'Marca almeno due nervature ingrossate e le nervature normali intermedie.':(!result.complete?'Sequenza parziale: aggiungi le altre nervature di riferimento.':'Verifica visivamente il conteggio e la direzione di lettura.');
   $('undoButton').disabled=!markers.length;$('clearButton').disabled=!markers.length;
+  $('lookupCodeButton').disabled=!result.code;
   return result;
 }
 function showPanel(panel){
-  for(const name of ['scanner','archive','guide'])$(name+'Panel').hidden=name!==panel;
+  for(const name of ['scanner','catalog','archive','guide'])$(name+'Panel').hidden=name!==panel;
   document.querySelectorAll('[data-panel]').forEach(b=>b.classList.toggle('is-active',b.dataset.panel===panel));
-  $('currentSection').textContent={scanner:'Scanner',archive:'Archivio',guide:'Guida'}[panel];
-  if(panel==='archive')renderArchive();if(panel==='scanner')setTimeout(renderPhoto,0);
+  $('currentSection').textContent={scanner:'Scanner',catalog:'Acciaierie',archive:'Archivio',guide:'Guida'}[panel];
+  if(panel==='catalog')catalogController?.render();if(panel==='archive')renderArchive();if(panel==='scanner')setTimeout(renderPhoto,0);
   window.scrollTo({top:0,behavior:'smooth'});
 }
 async function resetScan(){
@@ -172,6 +175,8 @@ function setup(){
   $('printButton').addEventListener('click',currentForPrint);$('archiveSearch').addEventListener('input',renderArchive);
   $('exportButton').addEventListener('click',exportBackup);$('importInput').addEventListener('change',importBackup);
   $('archiveList').addEventListener('click',onArchiveClick);
+  $('lookupCodeButton').addEventListener('click',()=>{const code=updateReading().code;showPanel('catalog');catalogController?.searchCode(code);});
+  catalogController=initCatalogController({notify:showToast});
   window.addEventListener('resize',()=>{if(!$('scannerPanel').hidden)renderPhoto();});
   writeFields();updateReading();
 }
