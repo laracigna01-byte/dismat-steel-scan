@@ -1,6 +1,6 @@
 # DISMAT Steel Scan
 
-PWA **offline-first** per rilievo manuale assistito delle marcature sulle barre d'armatura, con archivio fotografico e stampa di schede PDF. Versione studio **0.3 (architettura MVC)**, uso interno DISMAT.
+PWA **offline-first** per rilievo manuale assistito delle marcature sulle barre d'armatura, con archivio fotografico e stampa di schede PDF. Versione studio **0.4 (architettura MVC)**, uso interno DISMAT.
 
 ## Funzionalità della versione studio
 - Fotocamera / caricamento foto, zoom, contrasto, rotazione e marcatura manuale delle nervature.
@@ -31,5 +31,8 @@ Archivio locale per browser e dispositivo. GitHub **non** sincronizza le schede 
 
 Non copiare codice, immagini o database proprietari da applicazioni commerciali.
 
-## Catalogo documentale (versione studio 0.3)
+## Catalogo documentale (versione studio 0.4)
 Le prime 2 voci documentate sono ALFA ACCIAI 029/24-CA (codice 0-4-2-6) e FERRIERA VALSABBIA 036/23-CA (0-4-1-9), con collegamento al PDF del produttore. Le scadenze sono quelle dei PDF: non attestano lo stato in tempo reale. Nuove voci manuali restano esplicitamente NON VERIFICATE. Aggiornare le fonti curate tramite revisioni Git, mai sovrascrivere l’archivio delle prove.
+
+## Aggiornamento documentale 23-11-2026
+La versione v0.4 include 13 attestati pubblici trascritti autonomamente da 4 produttori (Alfa Acciai, Acciaierie di Sicilia, Ferriera Valsabbia, Sider Sipe), classificati per prodotto (barre, rotoli, fili, reti, tralicci), con numero, impianto, date, classe, diametri, collegamento alla fonte originale e marchio **solo quando il codice numerico e documentato**. Le voci con punzonatura/cartellino non hanno un codice di nervature inventato. I dati non costituiscono banca dati completa STC, né controllo di validita in tempo reale. Vedere docs/FONTI_CATALOGO.md.

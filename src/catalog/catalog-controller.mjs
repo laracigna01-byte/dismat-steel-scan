@@ -13,10 +13,12 @@ export function initCatalogController({notify}) {
   let store,editing=null;
   try{store=createCatalogStore();store.manual();}catch(e){notify('Catalogo manuale non disponibile: '+e.message,true);}
   function render(){
-    $('catalogRevision').textContent=`${OFFICIAL_CATALOG.length} attestati documentati · aggiornamento fonti ${CATALOG_REVISION}`;
+    $('catalogRevision').textContent=`${OFFICIAL_CATALOG.length} attestati trascritti da documenti pubblici · controllo fonti ${CATALOG_REVISION}`;
     try{
       const all=store?store.all():OFFICIAL_CATALOG;
-      $('catalogList').innerHTML=catalogMarkup(all,$('catalogSearch').value);
+      const kind=$('catalogProductFilter').value;
+      const shown=kind==='tutti'?all:all.filter(item=>item.productKind===kind);
+      $('catalogList').innerHTML=catalogMarkup(shown,$('catalogSearch').value);
       $('catalogCount').textContent=String(all.length);
     }catch(e){notify(e.message,true);$('catalogList').textContent='Errore di lettura del catalogo locale.';}
   }
@@ -28,6 +30,7 @@ export function initCatalogController({notify}) {
     $('catalogFormWrap').hidden=false;$('catalogFormWrap').scrollIntoView({behavior:'smooth',block:'start'});
   }
   $('catalogSearch').addEventListener('input',render);
+  $('catalogProductFilter').addEventListener('change',render);
   $('catalogAddButton').addEventListener('click',()=>openForm());
   $('catalogCancelButton').addEventListener('click',clearForm);
   $('catalogEntryForm').addEventListener('submit',event=>{
@@ -67,6 +70,7 @@ export function initCatalogController({notify}) {
     searchCode(code){
       const normalized=normalizeMark(code);
       $('catalogSearch').value=normalized||'';
+      $('catalogProductFilter').value='barre';
       render();
       if(normalized)notify('Corrispondenze documentali da verificare sull’attestato originale.');
     }

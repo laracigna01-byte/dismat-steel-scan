@@ -34,3 +34,6 @@ PWA leggera e offline-first, isolata dalle altre app DISMAT, sviluppata con codi
 - `src/catalog/catalog-controller.mjs`: ricerca e gestione interfaccia senza intaccare i controller delle scansioni.
 - Una corrispondenza del marchio indica solo un possibile documento da esaminare. Nessuna compilazione automatica di produttore o esito.
 - L’aggiornamento dei documenti integrati richiede una modifica versionata del catalogo e una nuova pubblicazione, senza cancellare le schede locali.
+
+## Ampliamento documentale v0.4
+Il catalogo comprende diverse tipologie di prodotto, ciascuna con un proprio attestato. `productKind` separa `barre`, `rotoli`, `filo`, `reti`, `tralicci`. Quando la ricerca parte dalla lettura delle nervature della barra, la vista si limita a `barre`; per consultazione documentale si puo filtrare qualsiasi categoria. I codici numerici sono valorizzati soltanto se presenti nel PDF originale. Data di scadenza documentale NON equivale a validita effettiva: il controllo presso il Servizio Tecnico Centrale resta esterno. La UI non importa archivi commerciali di terze parti. Ogni voce possiede URL della fonte primaria e descrizione sintetica originale.

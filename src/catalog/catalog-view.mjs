@@ -11,8 +11,8 @@ export function catalogMarkup(records,query,date=new Date().toISOString().slice(
     const dateNote=dateState==='expired-by-date'?'Scaduto secondo la data del documento':dateState==='within-document-dates'?'Entro le date riportate nel documento':dateState==='not-yet-valid'?'Non ancora nel periodo riportato':'Validita non verificata';
     const safeUrl=typeof item.sourceUrl==='string'&&/^https:\/\/[^\s]+$/i.test(item.sourceUrl)?item.sourceUrl:'';
     return `<article class="catalog-card">
-      <div class="catalog-card-top"><span class="catalog-origin ${documented?'documented':'manual'}">${documented?'DOCUMENTO STC':'INSERIMENTO MANUALE · NON VERIFICATO'}</span><span class="catalog-code">${html(item.markCode||'Marchio non indicato')}</span></div>
-      <h3>${html(item.producer)}</h3>
+      <div class="catalog-card-top"><span class="catalog-origin ${documented?'documented':'manual'}">${documented?'DOCUMENTO STC':'INSERIMENTO MANUALE · NON VERIFICATO'}</span><span class="catalog-code">${html(item.markCode||'Non numerico / n.d.')}</span></div>
+      <h3>${html(item.producer)}</h3><span class="catalog-kind">${html(({barre:'Barre',rotoli:'Rotoli',filo:'Filo',reti:'Reti elettrosaldate',tralicci:'Tralicci'})[item.productKind]||'Tipologia non specificata')}</span>
       <p class="catalog-plant">${html(item.plant||'Stabilimento da inserire')}</p>
       <div class="catalog-facts"><span><strong>Prodotto</strong>${html(item.steel||'—')} · ${html(item.product||'Non indicato')}</span><span><strong>Diametri</strong>${html(item.diameters||'—')}</span><span><strong>Attestato</strong>${html(item.certificate||'Non inserito')}</span><span><strong>Termine documento</strong>${html(item.validUntil||'Non indicato')}</span></div>
       <p class="catalog-date ${dateState==='expired-by-date'?'expired':''}">${html(dateNote)}. Non equivale a una verifica STC in tempo reale.</p>

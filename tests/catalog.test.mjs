@@ -4,7 +4,15 @@ import {normalizeMark,catalogueSearch,documentDateState,validateManualEntry,CATA
 import {createCatalogStore} from '../src/catalog/catalog-store.mjs';
 import {catalogMarkup} from '../src/catalog/catalog-view.mjs';
 
-assert.equal(OFFICIAL_CATALOG.length,2);
+assert.equal(OFFICIAL_CATALOG.length,13);
+assert.equal(new Set(OFFICIAL_CATALOG.map(x=>x.producer)).size,4);
+assert.equal(new Set(OFFICIAL_CATALOG.map(x=>x.id)).size,13);
+assert.equal(new Set(OFFICIAL_CATALOG.map(x=>x.certificate)).size,13);
+assert.ok(OFFICIAL_CATALOG.every(x=>/^https:\/\//.test(x.sourceUrl) && /^\d{4}-\d{2}-\d{2}$/.test(x.validUntil)));
+assert.ok(OFFICIAL_CATALOG.filter(x=>x.productKind==='barre').length===3);
+assert.equal(OFFICIAL_CATALOG.find(x=>x.certificate==='033/24-CA').markCode,'');
+assert.equal(OFFICIAL_CATALOG.find(x=>x.certificate==='004/23-CA').markCode,'0-4-2-5');
+assert.equal(OFFICIAL_CATALOG.find(x=>x.certificate==='005/25-CA').productKind,'reti');
 assert.equal(normalizeMark('0 · 4 · 2 · 6'),'0-4-2-6');
 assert.equal(normalizeMark('0—4—1—9'),'0-4-1-9');
 assert.equal(normalizeMark('foo'), '');
@@ -19,7 +27,7 @@ const memory=new Map();const fakeStorage={getItem:k=>memory.get(k)||null,setItem
 const store=createCatalogStore(fakeStorage);
 let rec=store.save({producer:'Produttore manuale',markCode:'4-7'});
 assert.equal(store.manual().length,1);
-assert.equal(store.all().length,3);
+assert.equal(store.all().length,14);
 assert.equal(store.manual()[0].origin,'manual');
 store.save({...rec,producer:'Aggiornato'});
 assert.equal(store.manual()[0].producer,'Aggiornato');
