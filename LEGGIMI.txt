@@ -1,0 +1,10 @@
+DISMAT STEEL SCAN 0.2 - PROTOTIPO STUDIO MVC
+
+1) Estrai tutto lo ZIP nella stessa cartella.
+2) Apri AVVIA_WINDOWS.bat (richiede Python installato).
+3) Browser: http://localhost:8767
+4) Test (se Node installato): npm test
+
+Le schede restano salvate nel browser; esporta spesso Backup JSON.
+Non sono presenti IA o identificazioni automatiche dei produttori.
+Per dettagli leggere README.md e docs/ARCHITETTURA.md.

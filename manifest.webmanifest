@@ -1,0 +1,12 @@
+{
+  "name": "DISMAT Steel Scan - Studio",
+  "short_name": "Steel Scan",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101112",
+  "theme_color": "#121314",
+  "description": "Rilievo assistito dei marchi di laminazione di barre d'armatura, offline e con archivio locale.",
+  "lang": "it",
+  "icons": [{"src":"./assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}

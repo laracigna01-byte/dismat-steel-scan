@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import { archiveMarkup } from '../src/views/archive-view.mjs';
+import { makePrintHtml } from '../src/views/pdf-view.mjs';
+const photo='data:image/jpeg;base64,aGVsbG8=';
+const scan={id:'1',photo,fields:{site:'<script>alert(1)</script>',location:'Pilastro P1',outcome:'Da verificare'},markers:[{x:.1,y:.5,type:'large'},{x:.2,y:.5,type:'normal'},{x:.3,y:.5,type:'large'}]};
+const archive=archiveMarkup([scan]);
+assert.ok(archive.includes('&lt;script&gt;'));
+assert.ok(!archive.includes('<script>alert(1)</script>'));
+const print=makePrintHtml(scan);
+assert.ok(print.includes('Da verificare'));
+assert.ok(print.includes('VERSIONE STUDIO'));
+assert.ok(print.includes('&lt;script&gt;'));
+console.log('TEST VISTE: 5/5 OK');

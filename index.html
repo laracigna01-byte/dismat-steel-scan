@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#121314">
+  <meta name="description" content="DISMAT Steel Scan: rilievo assistito dei marchi di laminazione delle barre d'armatura, archivio locale e schede PDF.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/svg+xml" href="./assets/icon.svg">
+  <link rel="stylesheet" href="./style.css">
+  <title>DISMAT Steel Scan | Studio</title>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#scanner" aria-label="DISMAT Steel Scan, scanner">
+        <span class="brand-symbol" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="brand-copy"><strong>DISMAT</strong><small>STEEL SCAN</small></span>
+      </a>
+      <div class="sidebar-kicker">STRUMENTI</div>
+      <nav class="nav" aria-label="Navigazione">
+        <button class="nav-link is-active" data-panel="scanner"><span class="nav-ico">⌗</span> Scanner <span class="nav-arrow">↗</span></button>
+        <button class="nav-link" data-panel="archive"><span class="nav-ico">▤</span> Archivio <span class="nav-count" id="sideCount">0</span></button>
+        <button class="nav-link" data-panel="guide"><span class="nav-ico">ⓘ</span> Guida</button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="local-card"><span class="local-dot"></span><div><strong>Archivio locale</strong><small>Le foto restano sul dispositivo</small></div></div>
+      <div class="sidebar-footer">DISMAT · VERSIONE STUDIO 0.2<br>PROTOTIPO AD USO INTERNO</div>
+    </aside>
+
+    <div class="main-column">
+      <header class="topbar">
+        <div class="topbar-left"><span class="topbar-tag">LABORATORIO / STRUMENTI</span><span class="topbar-sep">/</span><span id="currentSection">Scanner</span></div>
+        <span class="topbar-status"><span class="status-dot"></span> VERSIONE LOCALE</span>
+      </header>
+
+      <main class="content">
+        <section id="scannerPanel" class="panel">
+          <div class="page-intro">
+            <div><div class="eyebrow"><span class="eyebrow-line"></span> RILIEVO ASSISTITO</div><h1>Leggi il <em>marchio.</em><br>Archivia la prova.</h1><p>Fotografa una barra d'armatura, marca le nervature e registra i dati della verifica. La lettura è manuale assistita: nessuna identificazione automatica non verificata.</p></div>
+            <span class="intro-code">SS / 01</span>
+          </div>
+          <div class="workspace">
+            <section class="surface photo-surface" aria-label="Fotografia e marcatura">
+              <div class="surface-heading"><div><span class="section-index">01</span><h2>Fotografia del tondino</h2></div><span class="heading-meta">FOTO + MARCATORI</span></div>
+              <div class="photo-toolbar">
+                <label class="button button-primary upload-button">📷 <span>Fotocamera</span><input type="file" id="cameraInput" accept="image/*" capture="environment" hidden></label>
+                <label class="button button-outline upload-button">↑ <span>Carica foto</span><input type="file" id="imageInput" accept="image/*" hidden></label>
+                <button class="button button-minimal" id="rotateButton" title="Ruota la foto di 90 gradi" disabled>↻ Ruota</button>
+              </div>
+              <div class="photo-stage" id="photoStage">
+                <div class="photo-placeholder" id="photoPlaceholder">
+                  <div class="empty-graphic"><div class="bar-graphic"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="scan-corners corner-a"></span><span class="scan-corners corner-b"></span><span class="scan-corners corner-c"></span><span class="scan-corners corner-d"></span></div>
+                  <strong>Pronto per la scansione</strong><span>Carica o scatta una foto ravvicinata del marchio di laminazione.</span>
+                </div>
+                <canvas id="imageCanvas" aria-label="Fotografia della barra con marcatori" hidden></canvas>
+              </div>
+              <div class="marker-toolbar">
+                <div class="toolbar-caption">TOCCA LA FOTO PER MARCARE</div>
+                <div class="marker-buttons"><button class="marker-type is-selected" data-type="large"><span class="marker-dot large-dot"></span> Nervatura ingrossata</button><button class="marker-type" data-type="normal"><span class="marker-dot normal-dot"></span> Nervatura normale</button></div>
+                <div class="quick-tools"><button id="undoButton" class="text-button" disabled>↶ Annulla</button><button id="clearButton" class="text-button" disabled>× Rimuovi tutti</button></div>
+              </div>
+              <div class="photo-hint"><span>✦</span> Inquadra la sequenza completa. Tocca un marcatore per eliminarlo; puoi ingrandire la foto.</div>
+              <div class="zoom-row"><label for="zoomRange">Zoom foto</label><input id="zoomRange" type="range" min="100" max="200" step="10" value="100" disabled><span id="zoomValue">100%</span><label for="contrastRange">Contrasto</label><input id="contrastRange" type="range" min="100" max="200" step="10" value="100" disabled></div>
+            </section>
+            <section class="surface data-surface" aria-label="Dati della rilevazione">
+              <div class="surface-heading"><div><span class="section-index">02</span><h2>Dati e lettura</h2></div><button class="link-button" id="newButton">+ Nuova scheda</button></div>
+              <div class="result-box"><span class="result-label">CODICE RICOSTRUITO · DA CONFERMARE</span><div class="result-main" id="codeResult">—</div><p id="codeHelp">Marca almeno due nervature ingrossate e le nervature normali intermedie.</p><div class="result-footer"><span id="largeCounter">0 ingrossate</span><span class="result-separator">·</span><span id="normalCounter">0 normali</span><button id="reverseButton" title="Inverti la direzione di lettura">⇄ Inverti lettura</button></div></div>
+              <div class="form-grid">
+                <label class="field full">Cantiere / commessa <input id="site" placeholder="Es. Cantiere Roma - Lotto A" autocomplete="off"></label>
+                <label class="field">Data rilievo <input type="date" id="date"></label>
+                <label class="field">Tipo di acciaio <select id="steel"><option value="">Da definire</option><option>B450C</option><option>B450A</option><option>Altro / non noto</option></select></label>
+                <label class="field">Diametro nominale (mm) <input id="diameter" type="number" min="0" step="0.1" placeholder="Es. 16"></label>
+                <label class="field">Lotto / DDT <input id="ddt" placeholder="Numero lotto o DDT"></label>
+                <label class="field full">Posizione / campione <input id="location" placeholder="Es. Pilastro P1 · Barra n. 3"></label>
+                <label class="field full">Produttore dichiarato o verificato <input id="producer" placeholder="Compilare solo dopo controllo documentale"></label>
+                <label class="field full">Riferimento attestato STC <input id="certificate" placeholder="Numero e data dell'attestato, se verificato"></label>
+                <label class="field full">Esito della lettura <select id="outcome"><option>Da verificare</option><option>Lettura da approfondire</option><option>Confronto documentale eseguito</option><option>Marchio illeggibile</option></select></label>
+                <label class="field full">Note <textarea id="notes" rows="3" placeholder="Osservazioni, condizioni della barra, riscontri..."></textarea></label>
+              </div>
+              <div class="action-row"><button class="button button-primary wide" id="saveButton">▣ Salva nell'archivio</button><button class="button button-outline" id="printButton">↗ Scheda PDF</button></div>
+              <p class="form-disclaimer">Il codice è ricavato dai marcatori inseriti dall'operatore, non da IA. Questa scheda non sostituisce l'identificazione documentale o i controlli previsti dalla normativa.</p>
+            </section>
+          </div>
+        </section>
+
+        <section id="archivePanel" class="panel" hidden>
+          <div class="page-intro short"><div><div class="eyebrow"><span class="eyebrow-line"></span> DATI DEL DISPOSITIVO</div><h1>Archivio <em>rilievi.</em></h1><p>Le schede e le fotografie sono conservate localmente in questo browser. Esporta un backup per trasferirle o proteggerle.</p></div></div>
+          <section class="surface archive-surface">
+            <div class="archive-controls"><label class="search-wrap"><span>⌕</span><input id="archiveSearch" type="search" placeholder="Cerca cantiere, codice, lotto, produttore..."></label><div class="archive-tools"><button id="exportButton" class="button button-outline">↓ Backup JSON</button><label class="button button-outline upload-button">↑ Importa JSON<input id="importInput" type="file" accept=".json,application/json" hidden></label></div></div>
+            <div id="archiveList" class="archive-list"></div>
+          </section>
+        </section>
+
+        <section id="guidePanel" class="panel" hidden>
+          <div class="page-intro short"><div><div class="eyebrow"><span class="eyebrow-line"></span> UTILIZZO E LIMITI</div><h1>Come <em>funziona.</em></h1><p>Una prima versione operativa, senza automatismi che possano produrre risultati tecnici non verificati.</p></div></div>
+          <div class="guide-grid"><article class="surface guide-card"><span class="guide-number">01</span><h2>Acquisisci</h2><p>Carica una fotografia nitida del marchio, possibilmente con tutta la sequenza delle nervature. Puoi ruotarla e aumentare zoom e contrasto.</p></article><article class="surface guide-card"><span class="guide-number">02</span><h2>Marca</h2><p>Seleziona <b>Nervatura ingrossata</b> e tocca le nervature di riferimento. Passa a <b>Nervatura normale</b> e tocca quelle intermedie. Per correggere, tocca nuovamente un punto.</p></article><article class="surface guide-card"><span class="guide-number">03</span><h2>Leggi</h2><p>L'app ordina le marcature lungo la barra e conta le nervature normali comprese tra due ingrossate consecutive. Controlla sempre il verso e la sequenza risultante.</p></article><article class="surface guide-card"><span class="guide-number">04</span><h2>Documenta</h2><p>Compila il riferimento del cantiere e, se disponibili, DDT e attestato. Salva la scheda o stampa in PDF. Il confronto con gli attestati è ancora manuale.</p></article></div>
+          <div class="guide-note"><strong>Importante</strong><p>La versione 0.1 non identifica automaticamente il produttore, non verifica online gli attestati STC, non effettua riconoscimento fotografico tramite IA e non certifica la conformità del materiale. Il backup JSON comprende le fotografie: conservalo in una posizione aziendale adeguata.</p></div>
+        </section>
+      </main>
+      <footer class="main-footer">© DISMAT · STRUMENTO INTERNO DI SUPPORTO <span>VERSIONE STUDIO 0.2</span></footer>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
