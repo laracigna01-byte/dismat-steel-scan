@@ -10,14 +10,17 @@ function downloadJson(text){
   document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
 }
 export function initCatalogController({notify}) {
-  let store,editing=null;
+  let store,editing=null,scanLookupOnlyOfficial=false;
   try{store=createCatalogStore();store.manual();}catch(e){notify('Catalogo manuale non disponibile: '+e.message,true);}
   function render(){
-    $('catalogRevision').textContent=`${OFFICIAL_CATALOG.length} attestati trascritti da documenti pubblici · controllo fonti ${CATALOG_REVISION}`;
+    const attests=OFFICIAL_CATALOG.filter(item=>item.origin==='published-document').length;
+    const technical=OFFICIAL_CATALOG.filter(item=>item.origin==='technical-sheet').length;
+    $('catalogRevision').textContent=`${attests} attestati STC + ${technical} schede tecniche · fonti ${CATALOG_REVISION}${scanLookupOnlyOfficial?' · ricerca solo attestati STC':''}`;
     try{
       const all=store?store.all():OFFICIAL_CATALOG;
       const kind=$('catalogProductFilter').value;
-      const shown=kind==='tutti'?all:all.filter(item=>item.productKind===kind);
+      const eligible=scanLookupOnlyOfficial?all.filter(item=>item.origin==='published-document'):all;
+      const shown=kind==='tutti'?eligible:eligible.filter(item=>item.productKind===kind);
       $('catalogList').innerHTML=catalogMarkup(shown,$('catalogSearch').value);
       $('catalogCount').textContent=String(all.length);
     }catch(e){notify(e.message,true);$('catalogList').textContent='Errore di lettura del catalogo locale.';}
@@ -29,8 +32,8 @@ export function initCatalogController({notify}) {
     $('catalogEditTitle').textContent=item?'Modifica scheda manuale':'Nuova scheda manuale';
     $('catalogFormWrap').hidden=false;$('catalogFormWrap').scrollIntoView({behavior:'smooth',block:'start'});
   }
-  $('catalogSearch').addEventListener('input',render);
-  $('catalogProductFilter').addEventListener('change',render);
+  $('catalogSearch').addEventListener('input',()=>{scanLookupOnlyOfficial=false;render();});
+  $('catalogProductFilter').addEventListener('change',()=>{scanLookupOnlyOfficial=false;render();});
   $('catalogAddButton').addEventListener('click',()=>openForm());
   $('catalogCancelButton').addEventListener('click',clearForm);
   $('catalogEntryForm').addEventListener('submit',event=>{
@@ -69,6 +72,7 @@ export function initCatalogController({notify}) {
     render,
     searchCode(code){
       const normalized=normalizeMark(code);
+      scanLookupOnlyOfficial=true;
       $('catalogSearch').value=normalized||'';
       $('catalogProductFilter').value='barre';
       render();

@@ -1,6 +1,6 @@
 # Fonti pubbliche del catalogo Steel Scan
 
-Revisione: 23 novembre 2026. Schede trascritte autonomamente da **attestati pubblicati dai produttori**. Nessun database Nervix o dato interno di terze parti e stato importato.
+Revisione: 23 novembre 2026. Schede trascritte autonomamente da **attestati STC e schede tecniche pubblicati dai produttori**; i due tipi di fonte sono distinti nell'app. Nessun database Nervix o dato interno di terze parti e stato importato.
 
 **Attenzione:** il link a un attestato non prova che sia ancora in vigore al momento della consultazione: la qualifica potrebbe essere sostituita o revocata. La data indicata in Steel Scan e *solo quella stampata sul documento*. Non usare la ricerca fotografica come certificazione. Gli attestati sono specifici per tipo di prodotto, stabilimento e famiglia di acciaio.
 
@@ -27,3 +27,15 @@ Riferimento istituzionale: https://cslp.mit.gov.it/acciai (NTC 2018, STC, prodot
 In futuro nuovi attestati verranno inseriti solo con URL della fonte pubblica, prodotto, stabilimento, classe, numero e date. I dati non confermati resteranno **non verificati**, senza codici inventati.
 
 Per la rintracciabilita la documentazione di accompagnamento delle forniture deve essere verificata secondo NTC 2018, compresi attestato, certificato 3.1 e DDT. La PWA non sostituisce i controlli della Direzione Lavori.
+
+## Ampliamento barre B450C (v0.5, 23/11/2026)
+
+| Produttore e stabilimento | Tipo documento | Prodotto / diametri | Numero STC | Marchio trascritto | Date sul documento | Fonte pubblica |
+|---|---|---|---|---|---|---|
+| Feralpi Siderurgica, Lonato (BS) | Attestato STC | Barre B450C, 6-40 mm | 030/23-CA | 0-4-5 | 04/12/2023 - 03/12/2028 | https://www.feralpigroup.com/sites/default/files/030-23-CA_BARRE%20B450C.pdf |
+| ITON–Seine, Bonnières-sur-Seine (Francia) | Attestato STC italiano | Barre B450C, 8-14 mm | 009/23-CA | 0-3-9 | 07/07/2023 - 06/07/2028 | https://www.rivaacier.com/items_RivaFE/26/allegati/3/RivaAcier_ItonSeine_B450C_CSLP_IT.pdf |
+| ALPA, Gargenville (Francia) | Attestato STC italiano | Barre B450C, 12-40 mm | 008/23-CA | Non trascritto: grafica non sufficientemente leggibile | 04/07/2023 - 03/07/2028 | https://www.rivaacier.com/items_RivaFE/38/allegati/2/RivaAcier_ALPA_Gargenville_B450C_CSLP_IT.pdf |
+| Ferriere Nord (Pittini), Osoppo (UD) | **Sola scheda tecnica** SPF201 rev.15 (17/03/2022) | Barre B450C, 8-32 mm | **NON DISPONIBILE IN QUESTA FONTE** | 4-7 (come indicato dalla scheda) | La scheda tecnica non determina la validità STC | https://www.pittini.com/wp-content/uploads/sites/21/Gruppo-Pittini-Barre-SPF201-B450C.pdf |
+| Siderpotenza (Pittini), Potenza (PZ) | **Sola scheda tecnica** SPB308 rev.1 (03/11/2023) | Barre B450C, 8-36 mm | **NON DISPONIBILE IN QUESTA FONTE** | 4-7-2 (come indicato dalla scheda) | La scheda tecnica non determina la validità STC | https://www.pittini.com/wp-content/uploads/sites/21/Gruppo-Pittini-tondo-in-barre-SPB308-B450C.pdf |
+
+**Precauzioni:** (1) I PDF possono essere sostituiti o revocati: non è stato possibile interrogare direttamente il registro SICURNET2 durante questa revisione. (2) I produttori francesi sopra citati dispongono di un attestato STC italiano, ma non devono essere presentati come acciaierie italiane. (3) Le schede Pittini riportano marchi e caratteristiche tecniche, **non** numero o date di attestato: non inventarli né trattare quelle schede come documenti STC. (4) L'attestato Feralpi riporta 6-40 mm, mentre la pagina commerciale menziona 8-40 mm: la scheda segue l'attestato, da verificare con il produttore quando necessario.
