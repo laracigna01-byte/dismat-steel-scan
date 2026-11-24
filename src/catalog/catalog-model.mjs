@@ -39,3 +39,11 @@ export function validateManualEntry(value) {
   const id=typeof value.id==='string'&&/^manual-[a-z\d-]{5,120}$/i.test(value.id)?value.id:`manual-${globalThis.crypto?.randomUUID?.()??Date.now().toString(36)}`;
   return {...entry,id,origin:'manual',sourceLabel:'Inserimento manuale · non verificato'};
 }
+
+/** Exact scan matches on bar attestations within the document date range only.
+ * This does NOT check the current STC registry. */
+export function exactScannerMatches(records,code,date=new Date().toISOString().slice(0,10)) {
+  const mark=normalizeMark(code);
+  if(!mark)return [];
+  return records.filter(item=>item.origin==='published-document' && item.productKind==='barre' && normalizeMark(item.markCode)===mark && documentDateState(item,date)==='within-document-dates');
+}

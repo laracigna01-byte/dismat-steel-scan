@@ -11,5 +11,6 @@
 .catalog-filter{min-height:42px;border:1px solid #56585b;border-radius:7px;background:#27282a;color:#f5f5f5;padding:0 12px;max-width:220px}.catalog-kind{display:inline-block;font-size:10px;font-weight:700;color:#f8d27b;padding:4px 8px;border:1px solid #625942;border-radius:5px;margin:4px 0 13px}
 @media(max-width:720px){.catalog-filter{max-width:none;width:100%;flex:1 1 100%}}
 
-/* Provenienza fonti: STC, scheda tecnica, inserimento manuale */
+/* Provenienza fonti: STC, scheda tecnica, storico scaduto, inserimento manuale */
+.catalog-origin.historic{color:#ff9b8a}.catalog-card:has(.catalog-origin.historic){border-color:#815147}
 .catalog-origin.technical{color:#efc56b}.catalog-card .catalog-checked{line-height:1.5;overflow-wrap:anywhere}

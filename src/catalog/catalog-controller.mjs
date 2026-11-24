@@ -1,4 +1,4 @@
-import {CATALOG_FIELDS,normalizeMark} from './catalog-model.mjs';
+import {CATALOG_FIELDS,normalizeMark,exactScannerMatches} from './catalog-model.mjs';
 import {createCatalogStore} from './catalog-store.mjs';
 import {catalogMarkup} from './catalog-view.mjs';
 import {CATALOG_REVISION,OFFICIAL_CATALOG} from './catalog-data.mjs';
@@ -19,9 +19,9 @@ export function initCatalogController({notify}) {
     try{
       const all=store?store.all():OFFICIAL_CATALOG;
       const kind=$('catalogProductFilter').value;
-      const eligible=scanLookupOnlyOfficial?all.filter(item=>item.origin==='published-document'):all;
+      const eligible=scanLookupOnlyOfficial?exactScannerMatches(all,$('catalogSearch').value):all;
       const shown=kind==='tutti'?eligible:eligible.filter(item=>item.productKind===kind);
-      $('catalogList').innerHTML=catalogMarkup(shown,$('catalogSearch').value);
+      $('catalogList').innerHTML=catalogMarkup(shown,scanLookupOnlyOfficial?'':$('catalogSearch').value);
       $('catalogCount').textContent=String(all.length);
     }catch(e){notify(e.message,true);$('catalogList').textContent='Errore di lettura del catalogo locale.';}
   }
@@ -76,7 +76,7 @@ export function initCatalogController({notify}) {
       $('catalogSearch').value=normalized||'';
       $('catalogProductFilter').value='barre';
       render();
-      if(normalized)notify('Corrispondenze documentali da verificare sull’attestato originale.');
+      if(normalized)notify('Ricerca esatta: eventuali candidati richiedono sempre verifica dell’attestato originale.');
     }
   };
 }

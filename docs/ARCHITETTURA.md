@@ -40,3 +40,6 @@ Il catalogo comprende diverse tipologie di prodotto, ciascuna con un proprio att
 
 ## Provenienza delle fonti v0.5
 `origin='published-document'` individua una scheda trascritta da un attestato STC pubblicato; `origin='technical-sheet'` una scheda tecnica pubblica del produttore (senza numero/data STC dedotti); `origin='manual'` le schede dell'utente (non verificate). Il controller e la vista distinguono le 3 origini; le schede curate non espongono CRUD manuale. Quando la ricerca parte dalla lettura del marchio dello scanner, vengono mostrati soltanto record `published-document` con `productKind='barre'`. I record tecnici restano ricercabili per consultazione manuale. La modifica al catalogo non cambia schema né chiavi delle scansioni IndexedDB e non altera i backup JSON.
+
+## Fonte STC storica (v0.6)
+La nuova tipologia `origin='historical-document'` si usa per attestati STC chiaramente scaduti senza prova della sostituzione corrente. Il renderer li distingue visivamente con stato rosso, descrizione storica e nessun CRUD manuale; la ricerca dallo scanner mostra soltanto `origin='published-document'` e `productKind='barre'`, quindi esclude storici, reti e tralicci. La consultazione manuale resta disponibile per ricerca retrospettiva. Nessun cambiamento a IndexedDB, JSON delle scansioni o chiavi storage.

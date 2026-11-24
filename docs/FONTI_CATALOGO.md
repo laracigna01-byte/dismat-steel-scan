@@ -39,3 +39,12 @@ Per la rintracciabilita la documentazione di accompagnamento delle forniture dev
 | Siderpotenza (Pittini), Potenza (PZ) | **Sola scheda tecnica** SPB308 rev.1 (03/11/2023) | Barre B450C, 8-36 mm | **NON DISPONIBILE IN QUESTA FONTE** | 4-7-2 (come indicato dalla scheda) | La scheda tecnica non determina la validità STC | https://www.pittini.com/wp-content/uploads/sites/21/Gruppo-Pittini-tondo-in-barre-SPB308-B450C.pdf |
 
 **Precauzioni:** (1) I PDF possono essere sostituiti o revocati: non è stato possibile interrogare direttamente il registro SICURNET2 durante questa revisione. (2) I produttori francesi sopra citati dispongono di un attestato STC italiano, ma non devono essere presentati come acciaierie italiane. (3) Le schede Pittini riportano marchi e caratteristiche tecniche, **non** numero o date di attestato: non inventarli né trattare quelle schede come documenti STC. (4) L'attestato Feralpi riporta 6-40 mm, mentre la pagina commerciale menziona 8-40 mm: la scheda segue l'attestato, da verificare con il produttore quando necessario.
+
+## Aggiornamento 24 novembre 2026: UNIFER e IRO storico
+
+| Produttore | Stabilimento | Prodotto | Tipologia documento | Marchio | Numero | Periodo riportato | Fonte |
+|---|---|---|---|---|---|---|---|
+| UNIFER S.p.A. | Villanova sull'Arda (PC), Via Mattei 14/16 | Traliccio elettrosaldato B450C, 6-16 mm | Attestato STC | 0-4-1-7 + etichetta / alternativa: etichetta rotolo qualificato | 044/24-CA | 11/12/2024 - 29/06/2029 | https://www.uniferspa.com/wp-content/uploads/sites/5/2024/12/44-24att-Unifer-B450C-traliccio-signed.pdf |
+| IRO S.p.A. | Odolo (BS), Via Brescia 12 | Barre B450C, 6-40 mm | **ATTESTATO STORICO SCADUTO** | 0-4-2-3 (due configurazioni) | 023/18-CA | 04/12/2018 - **03/12/2023** | https://www.iro-spa.it/attachment/28/download/Italia.pdf |
+
+L'attestato IRO consultato è scaduto: **NON è una prova dell'attuale qualificazione**. Un eventuale attestato successivo deve essere rintracciato autonomamente e verificato. Il catalogo conserva la testimonianza storica per riconoscimento documentale, ma il collegamento dallo scanner esclude gli attestati storici. Il documento UNIFER riguarda **tralicci**, non tondini individuali: non compare quindi nella ricerca automatizzata delle barre.

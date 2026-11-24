@@ -1,6 +1,6 @@
 # DISMAT Steel Scan
 
-PWA **offline-first** per rilievo manuale assistito delle marcature sulle barre d'armatura, con archivio fotografico e stampa di schede PDF. Versione studio **0.5 (architettura MVC)**, uso interno DISMAT.
+PWA **offline-first** per rilievo manuale assistito delle marcature sulle barre d'armatura, con archivio fotografico e stampa di schede PDF. Versione studio **0.6 (architettura MVC)**, uso interno DISMAT.
 
 ## Funzionalità della versione studio
 - Fotocamera / caricamento foto, zoom, contrasto, rotazione e marcatura manuale delle nervature.
@@ -35,9 +35,12 @@ Non copiare codice, immagini o database proprietari da applicazioni commerciali.
 Le prime 2 voci documentate sono ALFA ACCIAI 029/24-CA (codice 0-4-2-6) e FERRIERA VALSABBIA 036/23-CA (0-4-1-9), con collegamento al PDF del produttore. Le scadenze sono quelle dei PDF: non attestano lo stato in tempo reale. Nuove voci manuali restano esplicitamente NON VERIFICATE. Aggiornare le fonti curate tramite revisioni Git, mai sovrascrivere l’archivio delle prove.
 
 ## Aggiornamento documentale 23-11-2026
-La versione v0.5 include 13 attestati pubblici trascritti autonomamente da 4 produttori (Alfa Acciai, Acciaierie di Sicilia, Ferriera Valsabbia, Sider Sipe), classificati per prodotto (barre, rotoli, fili, reti, tralicci), con numero, impianto, date, classe, diametri, collegamento alla fonte originale e marchio **solo quando il codice numerico e documentato**. Le voci con punzonatura/cartellino non hanno un codice di nervature inventato. I dati non costituiscono banca dati completa STC, né controllo di validita in tempo reale. Vedere docs/FONTI_CATALOGO.md.
+La versione v0.6 include 13 attestati pubblici trascritti autonomamente da 4 produttori (Alfa Acciai, Acciaierie di Sicilia, Ferriera Valsabbia, Sider Sipe), classificati per prodotto (barre, rotoli, fili, reti, tralicci), con numero, impianto, date, classe, diametri, collegamento alla fonte originale e marchio **solo quando il codice numerico e documentato**. Le voci con punzonatura/cartellino non hanno un codice di nervature inventato. I dati non costituiscono banca dati completa STC, né controllo di validita in tempo reale. Vedere docs/FONTI_CATALOGO.md.
 
 ## Aggiornamento B450C barre — 23 novembre 2026 (v0.5)
 Ulteriori **3 attestati STC per barre**: Feralpi Siderurgica 030/23-CA (Italia); ITON–Seine 009/23-CA (Francia, qualificata STC per il mercato italiano); ALPA 008/23-CA (Francia, qualificata STC per il mercato italiano). Inoltre **2 schede tecniche del produttore**, non attestati: Ferriere Nord SPF201 rev.15 e Siderpotenza SPB308 rev.1.
 
 Totale: **18 schede documentali** = **16 attestati STC** + **2 schede tecniche**. Di queste, **8 riguardano barre** (6 attestati STC + 2 schede tecniche). Lo scanner confronta la sequenza soltanto con gli **attestati STC**, non con le schede tecniche. Nessuna verifica STC in tempo reale; nessun cambiamento all'archivio delle scansioni. Il marchio non leggibile in modo affidabile resta vuoto.
+
+## Aggiornamento 24 novembre 2026 (v0.6)
+Aggiunto UNIFER S.p.A., **attestato STC 044/24-CA**, per tralicci B450C (non barre), impianto Villanova sull'Arda, marchio presente sul disegno 0-4-1-7. Aggiunto in una sezione chiaramente contrassegnata **storica/scaduta** il documento IRO S.p.A. **023/18-CA**, barre B450C, marchio 0-4-2-3, scaduto il 03/12/2023. Quest'ultimo non viene restituito dalla ricerca dello scanner, che propone esclusivamente documenti STC non storici relativi alle barre. Totale **20** schede: **17** attestati STC non storici, **1** attestato storico scaduto, **2** schede tecniche. La versione non determina revoche né sostituzioni correnti: occorre sempre consultare il documento e l'eventuale aggiornamento sul registro ufficiale.
