@@ -7,3 +7,10 @@ node_modules/
 dist/
 *.zip
 *.log
+
+# Dataset and photos: never commit real training examples to the public repository
+esempi-ia/
+dataset-ia/
+training-data/
+*.training-sample.json
+DISMAT-ribs-esempio-*.json

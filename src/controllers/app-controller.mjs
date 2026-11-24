@@ -3,6 +3,8 @@ import { FIELDS, makeId, todayLocal, validPhotoUrl } from '../domain/scan-model.
 import { createScanRepository } from '../data/scan-repository.mjs';
 import { makeBackup, parseBackup } from '../services/backup-service.mjs';
 import { drawAnnotatedPhoto } from '../views/photo-canvas.mjs';
+import { captureTrainingPhoto } from '../views/training-photo.mjs';
+import { makeTrainingExample } from '../services/training-sample.mjs';
 import { archiveMarkup } from '../views/archive-view.mjs';
 import { makePrintHtml } from '../views/pdf-view.mjs';
 import { initCatalogController } from '../catalog/catalog-controller.mjs';
@@ -80,6 +82,7 @@ function updateReading(){
   $('codeHelp').textContent=!result.code?'Marca almeno due nervature ingrossate e le nervature normali intermedie.':(!result.complete?'Sequenza parziale: aggiungi le altre nervature di riferimento.':'Verifica visivamente il conteggio e la direzione di lettura.');
   $('undoButton').disabled=!markers.length;$('clearButton').disabled=!markers.length;
   $('lookupCodeButton').disabled=!result.code;
+  $('exportTrainingSampleButton').disabled=!(photo && result.complete);
   return result;
 }
 function showPanel(panel){
@@ -122,6 +125,25 @@ async function renderArchive(){
   if(q)scans=scans.filter(s=>[s.code,...Object.values(s.fields||{})].join(' ').toLocaleLowerCase('it').includes(q));
   target.innerHTML=archiveMarkup(scans,q);
 }
+function exportTrainingSample() {
+  if (!photo) {showToast('Prima acquisisci la fotografia.',true);return;}
+  if (!interpretMarkers(markers,reverse).complete) {
+    showToast('Prima completa e controlla i marcatori.',true);return;
+  }
+  if (!confirm('Confermi di avere i diritti per usare questa fotografia come esempio di addestramento e di avere verificato tutti i marcatori? Il file conterrà solo la fotografia e i punti marcati, NON dati di cantiere. Non verrà caricato online.'))return;
+  try{
+    const image=captureTrainingPhoto(photo,rotation);
+    const record=makeTrainingExample({
+      ...image,markers,reversed:reverse,operatorConfirmed:true
+    });
+    const blob=new Blob([JSON.stringify(record)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');
+    a.href=url;a.download='DISMAT-ribs-esempio-'+todayLocal()+'-'+makeId().slice(0,8)+'.json';
+    document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);
+    showToast('Esempio annotato esportato sul dispositivo. Nessuna foto inviata online.');
+  }catch(e){console.error(e);showToast(e.message||'Esportazione esempio non riuscita.',true);}
+}
+
 async function exportBackup(){
   if(!databaseReady){showToast('Archivio non disponibile.',true);return;}
   const all=await getAllScans();if(!all.length){showToast('Non ci sono schede da esportare.',true);return;}
@@ -168,6 +190,7 @@ function setup(){
   $('rotateButton').addEventListener('click',()=>{rotation=(rotation+90)%360;markers=rotateMarkersClockwise(markers);renderPhoto();updateReading();});
   $('undoButton').addEventListener('click',()=>{markers.pop();renderPhoto();updateReading();});
   $('clearButton').addEventListener('click',()=>{if(markers.length&&confirm('Rimuovere tutti i marcatori?')){markers=[];renderPhoto();updateReading();}});
+  $('exportTrainingSampleButton').addEventListener('click',exportTrainingSample);
   $('reverseButton').addEventListener('click',()=>{reverse=!reverse;updateReading();showToast(reverse?'Lettura invertita.':'Lettura normale.');});
   $('zoomRange').addEventListener('input',e=>{zoom=Number(e.target.value);$('zoomValue').textContent=`${zoom}%`;renderPhoto();});
   $('contrastRange').addEventListener('input',e=>{contrast=Number(e.target.value);renderPhoto();});

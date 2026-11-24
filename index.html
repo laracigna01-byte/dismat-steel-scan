@@ -26,7 +26,7 @@
       </nav>
       <div class="sidebar-spacer"></div>
       <div class="local-card"><span class="local-dot"></span><div><strong>Archivio locale</strong><small>Le foto restano sul dispositivo</small></div></div>
-      <div class="sidebar-footer">DISMAT · VERSIONE STUDIO 0.6<br>PROTOTIPO AD USO INTERNO</div>
+      <div class="sidebar-footer">DISMAT · VERSIONE STUDIO 0.7<br>PROTOTIPO AD USO INTERNO</div>
     </aside>
 
     <div class="main-column">
@@ -62,6 +62,10 @@
                 <div class="quick-tools"><button id="undoButton" class="text-button" disabled>↶ Annulla</button><button id="clearButton" class="text-button" disabled>× Rimuovi tutti</button></div>
               </div>
               <div class="photo-hint"><span>✦</span> Inquadra la sequenza completa. Tocca un marcatore per eliminarlo; puoi ingrandire la foto.</div>
+              <div class="training-export-bar">
+                <button class="button button-outline" id="exportTrainingSampleButton" disabled>↓ Esporta esempio per IA</button>
+                <span>Quando hai corretto tutte le nervature, puoi salvare un esempio per il futuro addestramento. Non viene inviato online e non include i dati del cantiere.</span>
+              </div>
               <div class="zoom-row"><label for="zoomRange">Zoom foto</label><input id="zoomRange" type="range" min="100" max="200" step="10" value="100" disabled><span id="zoomValue">100%</span><label for="contrastRange">Contrasto</label><input id="contrastRange" type="range" min="100" max="200" step="10" value="100" disabled></div>
             </section>
             <section class="surface data-surface" aria-label="Dati della rilevazione">
@@ -124,7 +128,7 @@
         <section id="guidePanel" class="panel" hidden>
           <div class="page-intro short"><div><div class="eyebrow"><span class="eyebrow-line"></span> UTILIZZO E LIMITI</div><h1>Come <em>funziona.</em></h1><p>Una prima versione operativa, senza automatismi che possano produrre risultati tecnici non verificati.</p></div></div>
           <div class="guide-grid"><article class="surface guide-card"><span class="guide-number">01</span><h2>Acquisisci</h2><p>Carica una fotografia nitida del marchio, possibilmente con tutta la sequenza delle nervature. Puoi ruotarla e aumentare zoom e contrasto.</p></article><article class="surface guide-card"><span class="guide-number">02</span><h2>Marca</h2><p>Seleziona <b>Nervatura ingrossata</b> e tocca le nervature di riferimento. Passa a <b>Nervatura normale</b> e tocca quelle intermedie. Per correggere, tocca nuovamente un punto.</p></article><article class="surface guide-card"><span class="guide-number">03</span><h2>Leggi</h2><p>L'app ordina le marcature lungo la barra e conta le nervature normali comprese tra due ingrossate consecutive. Controlla sempre il verso e la sequenza risultante.</p></article><article class="surface guide-card"><span class="guide-number">04</span><h2>Documenta</h2><p>Compila il riferimento del cantiere e, se disponibili, DDT e attestato. Salva la scheda o stampa in PDF. Il confronto con gli attestati resta responsabilita dell’operatore.</p></article></div>
-          <div class="guide-note"><strong>Importante</strong><p>La versione 0.6 confronta la sequenza letta con un catalogo documentale parziale, ma non identifica automaticamente il produttore ne verifica online gli attestati STC, non effettua riconoscimento fotografico tramite IA e non certifica la conformità del materiale. Il backup JSON comprende le fotografie: conservalo in una posizione aziendale adeguata.</p></div>
+          <div class="guide-note"><strong>Importante</strong><p>La versione 0.7 confronta la sequenza letta con un catalogo documentale parziale, ma non identifica automaticamente il produttore ne verifica online gli attestati STC, non effettua riconoscimento fotografico tramite IA e non certifica la conformità del materiale. Il backup JSON comprende le fotografie: conservalo in una posizione aziendale adeguata.</p></div>
         </section>
       </main>
       <footer class="main-footer">© DISMAT · STRUMENTO INTERNO DI SUPPORTO <span>VERSIONE STUDIO 0.5</span></footer>

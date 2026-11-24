@@ -14,3 +14,6 @@
 /* Provenienza fonti: STC, scheda tecnica, storico scaduto, inserimento manuale */
 .catalog-origin.historic{color:#ff9b8a}.catalog-card:has(.catalog-origin.historic){border-color:#815147}
 .catalog-origin.technical{color:#efc56b}.catalog-card .catalog-checked{line-height:1.5;overflow-wrap:anywhere}
+
+/* Optional offline ML dataset annotation export; scan/archive layout unchanged. */
+.training-export-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:0 20px 16px}.training-export-bar .button{flex-shrink:0;border-color:#6a5a33;color:#f5d48c}.training-export-bar .button:disabled{opacity:.45;cursor:not-allowed}.training-export-bar span{color:#a0a1a3;font-size:10px;line-height:1.55;flex:1;min-width:190px}@media(max-width:720px){.training-export-bar{padding:0 13px 16px}.training-export-bar .button{flex:1 1 100%}}
