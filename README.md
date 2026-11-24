@@ -1,6 +1,6 @@
 # DISMAT Steel Scan
 
-PWA **offline-first** per rilievo manuale assistito delle marcature sulle barre d'armatura, con archivio fotografico e stampa di schede PDF. Versione studio **0.7 (architettura MVC)**, uso interno DISMAT.
+PWA **offline-first** per rilievo manuale assistito delle marcature sulle barre d'armatura, con archivio fotografico e stampa di schede PDF. Versione studio **0.8 (architettura MVC)**, uso interno DISMAT.
 
 ## Funzionalità della versione studio
 - Fotocamera / caricamento foto, zoom, contrasto, rotazione e marcatura manuale delle nervature.
@@ -53,3 +53,8 @@ Per assemblare più esempi in un dataset separato train/val/test senza servizi a
     node training/prepare-dataset.mjs ./esempi-ia ./dataset-ia
 
 Le cartelle di fotografie ed esempi vanno mantenute **fuori dal repository GitHub pubblico**. Dataset pubblici e limiti in training/DATASETS.md.
+
+## Suggerimento locale di nervature normali (v0.8, sperimentale)
+Dopo avere caricato una fotografia e segnato almeno due nervature **ingrossate**, il pulsante **Suggerisci nervature normali** analizza localmente il contrasto del tratto compreso fra i punti di riferimento, suggerendo possibili nervature normali. L'operatore conferma il gruppo prima di aggiungerlo e puo **Annullare suggerimenti** in un solo click, mantenendo i marcatori inseriti manualmente. Se la fotografia non offre sufficiente contrasto, non aggiunge nulla e consente il metodo manuale. I suggerimenti NON assegnano il produttore ne verificano l'attestato STC.
+
+**Non e un modello IA addestrato:** e un primo assistente di visione a soglia adattativa, senza API, rete o costi. L'attuale percorso di annotazione per un futuro modello IA resta disponibile e invariato. Sono stati aggiunti test sintetici (nervature scure, chiare, inclinate, rumore, duplicati, foto senza nervature). Restano indispensabili collaudo su fotografie reali e conferma umana. Non modificati database IndexedDB, formato backup, stampa PDF, marcatura manuale e catalogo fonti.

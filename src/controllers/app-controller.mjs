@@ -3,6 +3,8 @@ import { FIELDS, makeId, todayLocal, validPhotoUrl } from '../domain/scan-model.
 import { createScanRepository } from '../data/scan-repository.mjs';
 import { makeBackup, parseBackup } from '../services/backup-service.mjs';
 import { drawAnnotatedPhoto } from '../views/photo-canvas.mjs';
+import { imageDataForRibAssist } from '../vision/vision-image.mjs';
+import { suggestNormalRibs } from '../vision/rib-assist.mjs';
 import { captureTrainingPhoto } from '../views/training-photo.mjs';
 import { makeTrainingExample } from '../services/training-sample.mjs';
 import { archiveMarkup } from '../views/archive-view.mjs';
@@ -20,6 +22,7 @@ let photoData = '';
 let rotation = 0;
 let reverse = false;
 let markers = [];
+let lastSuggestedMarkers = [];
 let markerType = 'large';
 let zoom = 100;
 let contrast = 100;
@@ -57,7 +60,7 @@ async function setPhoto(data){
 async function onPhotoChosen(event){
   const input=event.currentTarget;const f=input.files?.[0];input.value='';if(!f)return;
   if(markers.length && !confirm('Sostituire la fotografia? I marcatori di questa scheda saranno cancellati.'))return;
-  try{const compressed=await imageFromFile(f);rotation=0;reverse=false;markers=[];zoom=100;contrast=100;
+  try{const compressed=await imageFromFile(f);rotation=0;reverse=false;markers=[];lastSuggestedMarkers=[];zoom=100;contrast=100;
     $('zoomRange').value='100';$('contrastRange').value='100'; await setPhoto(compressed);updateReading();showToast('Fotografia acquisita. Puoi marcare le nervature.');
   }catch(e){showToast(e.message||'Impossibile leggere la foto.',true);}
 }
@@ -73,15 +76,39 @@ function onImageTap(e){
   const r=e.currentTarget.getBoundingClientRect();const x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
   if(x<0||x>1||y<0||y>1)return;
   const near=markers.findIndex(m=>Math.hypot((m.x-x)*r.width,(m.y-y)*r.height)<14);
-  if(near>=0){markers.splice(near,1);}else markers.push({x,y,type:markerType});
+  if(near>=0){lastSuggestedMarkers=lastSuggestedMarkers.filter(p=>p!==markers[near]);markers.splice(near,1);}else markers.push({x,y,type:markerType});
   renderPhoto();updateReading();
 }
+function addSuggestedNormals(){
+  if(!photo){showToast('Prima carica una fotografia.',true);return;}
+  if(markers.filter(m=>m.type==='large').length<2){showToast('Indica almeno due nervature ingrossate.',true);return;}
+  try{
+    const image=imageDataForRibAssist(photo,rotation);
+    const prediction=suggestNormalRibs(image,markers);
+    if(!prediction.points.length){showToast('Non trovo nervature distinguibili: continua con la marcatura manuale.',true);return;}
+    if(!confirm(`Ho trovato ${prediction.points.length} possibili nervature normali tra i riferimenti. È una stima sperimentale, NON un modello IA addestrato. Vuoi aggiungerle per controllarle e correggerle?`))return;
+    // Preserve manual marks and allow reversing the whole proposed batch.
+    lastSuggestedMarkers=[];
+    for(const point of prediction.points){const mark={...point};markers.push(mark);lastSuggestedMarkers.push(mark);}
+    renderPhoto();updateReading();
+    showToast(`${prediction.points.length} punti suggeriti: controllali uno per uno prima di usare il risultato.`);
+  }catch(error){console.error(error);showToast('Lettura assistita non disponibile su questa foto; usa i marcatori manuali.',true);}
+}
+function undoSuggestedNormals(){
+  if(!lastSuggestedMarkers.length)return;
+  const batch=new Set(lastSuggestedMarkers);
+  markers=markers.filter(marker=>!batch.has(marker));lastSuggestedMarkers=[];
+  renderPhoto();updateReading();showToast('Suggerimenti rimossi; i marcatori manuali restano.');
+}
+
 function updateReading(){
   const result=interpretMarkers(markers,reverse);
   $('codeResult').textContent=result.code||'—';$('largeCounter').textContent=`${result.largeCount} ingrossate`;$('normalCounter').textContent=`${result.normalCount} normali`;
   $('codeHelp').textContent=!result.code?'Marca almeno due nervature ingrossate e le nervature normali intermedie.':(!result.complete?'Sequenza parziale: aggiungi le altre nervature di riferimento.':'Verifica visivamente il conteggio e la direzione di lettura.');
   $('undoButton').disabled=!markers.length;$('clearButton').disabled=!markers.length;
   $('lookupCodeButton').disabled=!result.code;
+  $('suggestNormalsButton').disabled=!(photo&&result.largeCount>=2)||lastSuggestedMarkers.length>0;
+  $('undoSuggestionsButton').disabled=!lastSuggestedMarkers.length;
   $('exportTrainingSampleButton').disabled=!(photo && result.complete);
   return result;
 }
@@ -94,7 +121,7 @@ function showPanel(panel){
 }
 async function resetScan(){
   if(photo && (markers.length || $('site').value || $('notes').value) && !confirm('Creare una nuova scheda? Prima salva quella attuale se vuoi conservarla.'))return;
-  editingId=null;markers=[];reverse=false;rotation=0;zoom=100;contrast=100;$('zoomRange').value='100';$('contrastRange').value='100';writeFields();await setPhoto('');updateReading();showPanel('scanner');
+  editingId=null;markers=[];lastSuggestedMarkers=[];reverse=false;rotation=0;zoom=100;contrast=100;$('zoomRange').value='100';$('contrastRange').value='100';writeFields();await setPhoto('');updateReading();showPanel('scanner');
   showToast('Nuova scheda pronta.');
 }
 function collectScan(){
@@ -113,7 +140,7 @@ async function saveCurrent(){
 async function updateCount(){if(!databaseReady)return;const scans=await getAllScans();$('sideCount').textContent=String(scans.length);}
 async function loadScan(id){
   try{const s=await getScan(id);if(!s)return;editingId=s.id;writeFields(s.fields);rotation=[0,90,180,270].includes(s.rotation)?s.rotation:0;reverse=!!s.reversed;
-    markers=Array.isArray(s.markers)?s.markers.filter(m=>['large','normal'].includes(m.type)&&Number.isFinite(m.x)&&Number.isFinite(m.y)).map(m=>({x:m.x,y:m.y,type:m.type})):[];
+    lastSuggestedMarkers=[];markers=Array.isArray(s.markers)?s.markers.filter(m=>['large','normal'].includes(m.type)&&Number.isFinite(m.x)&&Number.isFinite(m.y)).map(m=>({x:m.x,y:m.y,type:m.type})):[];
     zoom=100;contrast=Number(s.contrast)||100;$('contrastRange').value=String(contrast);$('zoomRange').value='100';await setPhoto(s.photo);updateReading();showPanel('scanner');showToast('Scheda caricata.');
   }catch(e){console.error(e);showToast('Non è stato possibile aprire la scheda.',true);}
 }
@@ -187,10 +214,12 @@ function setup(){
   $('cameraInput').addEventListener('change',onPhotoChosen);$('imageInput').addEventListener('change',onPhotoChosen);
   $('imageCanvas').addEventListener('click',onImageTap);
   document.querySelectorAll('[data-type]').forEach(b=>b.addEventListener('click',()=>{markerType=b.dataset.type;document.querySelectorAll('[data-type]').forEach(e=>e.classList.toggle('is-selected',e===b));}));
-  $('rotateButton').addEventListener('click',()=>{rotation=(rotation+90)%360;markers=rotateMarkersClockwise(markers);renderPhoto();updateReading();});
-  $('undoButton').addEventListener('click',()=>{markers.pop();renderPhoto();updateReading();});
-  $('clearButton').addEventListener('click',()=>{if(markers.length&&confirm('Rimuovere tutti i marcatori?')){markers=[];renderPhoto();updateReading();}});
+  $('rotateButton').addEventListener('click',()=>{const previous=markers,rotated=rotateMarkersClockwise(previous);lastSuggestedMarkers=lastSuggestedMarkers.map(m=>rotated[previous.indexOf(m)]).filter(Boolean);markers=rotated;rotation=(rotation+90)%360;renderPhoto();updateReading();});
+  $('undoButton').addEventListener('click',()=>{const removed=markers.pop();lastSuggestedMarkers=lastSuggestedMarkers.filter(m=>m!==removed);renderPhoto();updateReading();});
+  $('clearButton').addEventListener('click',()=>{if(markers.length&&confirm('Rimuovere tutti i marcatori?')){markers=[];lastSuggestedMarkers=[];renderPhoto();updateReading();}});
   $('exportTrainingSampleButton').addEventListener('click',exportTrainingSample);
+  $('suggestNormalsButton').addEventListener('click',addSuggestedNormals);
+  $('undoSuggestionsButton').addEventListener('click',undoSuggestedNormals);
   $('reverseButton').addEventListener('click',()=>{reverse=!reverse;updateReading();showToast(reverse?'Lettura invertita.':'Lettura normale.');});
   $('zoomRange').addEventListener('input',e=>{zoom=Number(e.target.value);$('zoomValue').textContent=`${zoom}%`;renderPhoto();});
   $('contrastRange').addEventListener('input',e=>{contrast=Number(e.target.value);renderPhoto();});

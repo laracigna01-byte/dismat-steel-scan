@@ -17,3 +17,6 @@
 
 /* Optional offline ML dataset annotation export; scan/archive layout unchanged. */
 .training-export-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:0 20px 16px}.training-export-bar .button{flex-shrink:0;border-color:#6a5a33;color:#f5d48c}.training-export-bar .button:disabled{opacity:.45;cursor:not-allowed}.training-export-bar span{color:#a0a1a3;font-size:10px;line-height:1.55;flex:1;min-width:190px}@media(max-width:720px){.training-export-bar{padding:0 13px 16px}.training-export-bar .button{flex:1 1 100%}}
+
+/* Experimental on-device assisted detection, distinct from trained AI. */
+.vision-assist{margin:0 20px 10px;padding:13px 14px;border:1px solid #695934;border-radius:9px;background:#29251b}.vision-assist-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.vision-assist .button{white-space:normal}.vision-assist p{color:#c7b99d;font-size:10px;line-height:1.5;margin:9px 0 0}.vision-assist button:disabled{opacity:.4;cursor:not-allowed}@media(max-width:720px){.vision-assist{margin:0 13px 10px}.vision-assist-actions .button{flex:1 1 100%}}

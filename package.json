@@ -1,7 +1,7 @@
 {
   "name": "dismat-steel-scan",
   "private": true,
-  "version": "0.7.0",
+  "version": "0.8.0",
   "type": "module",
   "description": "PWA offline DISMAT per la lettura manuale assistita dei marchi sulle barre di armatura",
   "scripts": {
